@@ -38,7 +38,7 @@ ccloud ksql app configure-acls <ksqldb-app-name> Mongo.Fleets.Drivers location s
   
 ## 8. Stream Processing
 
-* ** Create a Stream of Fleet Events **
+### Create a Stream of Fleet Events
 
 CREATE STREAM FLEET_EVENT_STREAM (
   eventType varchar, speedCaptured integer, 
@@ -51,7 +51,7 @@ CREATE STREAM FLEET_EVENT_STREAM (
 );
 
 
-* ** Pick up hazard events **
+### Pick up hazard events
 
 CREATE TABLE HAZARDS AS 
 SELECT 
@@ -67,7 +67,7 @@ HAVING
   COUNT(*) > 3;
 
 
-* ** Capture status requests in a Stream **
+### Capture status requests in a Stream
 
 CREATE STREAM STATUS_REQUEST (
   timestamp varchar, fleetId varchar
@@ -77,7 +77,7 @@ CREATE STREAM STATUS_REQUEST (
 );
 
 
-* ** Stream of GPS locations **
+### Stream of GPS locations
 
 CREATE STREAM LOCATION_STREAM (
   latitude double, longitude double, 
@@ -88,7 +88,7 @@ CREATE STREAM LOCATION_STREAM (
 );
 
 
-* ** Tracking - Match Status Request & GPS co-ordinates
+### Tracking - Match Status Request & GPS co-ordinates
 
 CREATE STREAM STATUS_NOTIFICATIONS AS 
 SELECT 
