@@ -1,0 +1,25 @@
+{
+   "name": "voluble-telemetry-producer",
+   "config": {
+       "connector.class": "io.mdrogalis.voluble.VolubleSourceConnector",
+       "genkp.location.with": "#{Internet.uuid}",
+       "genv.location.latitude.with": "#{Address.latitude}",
+       "genv.location.longitude.with": "#{Address.longitude}",
+       "genv.location.timestamp.with": "#{date.between 'Sun Jun 21 00:00:00 PDT 2020','Tue Jun 23 23:59:59 PDT 2020'}",
+       "genv.location.fleetId.with": "#{number.number_between '3763527','37635532'}",
+       "genv.location.driverId.with": "#{number.number_between '76452','76454'}",
+       "genkp.status.with": "#{Internet.uuid}",
+       "genv.status.timestamp.with": "#{date.between 'Sun Jun 21 00:00:00 PDT 2020','Tue Jun 23 23:59:59 PDT 2020'}",
+       "genv.status.fleetId.matching": "location.value.fleetId",
+       "topic.status.throttle.ms": "5000",
+       "genkp.events.with": "#{Internet.uuid}",
+       "genv.events.eventType.with": "HARSH_BRAKING",
+       "genv.events.latitude.with": "#{Address.latitude}",
+       "genv.events.longitude.with": "#{Address.longitude}",
+       "genv.events.timestamp.with": "#{date.between 'Sun Jun 21 00:00:00 PDT 2020','Tue Jun 23 23:59:59 PDT 2020'}",
+       "genv.events.fleetId.matching": "location.value.fleetId",
+       "genv.events.driverId.matching": "location.value.driverId",
+       "global.throttle.ms": "200",
+       "global.history.records.max": "1000"
+   }
+}
