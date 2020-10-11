@@ -1,0 +1,16 @@
+{
+    "name": "mongo-sink-hazards",
+    "config": {
+        "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+        "tasks.max": "1",
+        "topics": "<grab-topic-from-ksqlDB-table>",
+        "connection.uri": "mongodb+srv://<mongo-atlas-url>/Fleets",
+        "database": "Fleets",
+        "collection": "FleetHazards",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter.schemas.enable": "false",
+        "key.converter.schemas.enable": "false",
+        "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.BsonOidStrategy"
+    }
+}
