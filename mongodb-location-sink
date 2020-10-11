@@ -1,0 +1,16 @@
+{
+    "name": "mongo-sink-location",
+    "config": {
+        "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+        "tasks.max": "1",
+        "topics": "location",
+        "connection.uri": "mongodb+srv://<mongo-atlas-url>/Fleets",
+        "database": "Fleets",
+        "collection": "LocationHistory",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter.schemas.enable": "false",
+        "key.converter.schemas.enable": "false",
+        "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.BsonOidStrategy"
+    }
+}
