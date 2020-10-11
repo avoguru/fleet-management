@@ -41,41 +41,62 @@ ccloud ksql app configure-acls <ksqldb-app-name> Mongo.Fleets.Drivers location s
 * ** Create a Stream of Fleet Events **
 
 CREATE STREAM FLEET_EVENT_STREAM (
- eventType varchar, speedCaptured integer,
- latitude double, longitude double,
- timestamp varchar, driverId varchar,
- fleetId varchar
+  eventType varchar, speedCaptured integer, 
+  latitude double, longitude double, 
+  timestamp varchar, driverId varchar, 
+  fleetId varchar
 ) WITH (
- kafka_topic = 'events', value_format = 'JSON',
- timestamp = 'timestamp', timestamp_format = 'E MMM dd HH:mm:ss z yyyy'
+  kafka_topic = 'events', value_format = 'JSON', 
+  timestamp = 'timestamp', timestamp_format = 'E MMM dd HH:mm:ss z yyyy'
 );
+
 
 * ** Pick up hazard events **
 
-CREATE TABLE HAZARDS AS
-SELECT driverId,
- COUNT(*)
-FROM FLEET_EVENT_STREAM
-WINDOW TUMBLING (SIZE 300 SECONDS)
-WHERE eventType='HARSH_BRAKING'
-GROUP BY driverId
-HAVING COUNT(*) > 3;
+CREATE TABLE HAZARDS AS 
+SELECT 
+  driverId, 
+  COUNT(*) 
+FROM 
+  FLEET_EVENT_STREAM WINDOW TUMBLING (SIZE 300 SECONDS) 
+WHERE 
+  eventType = 'HARSH_BRAKING' 
+GROUP BY 
+  driverId 
+HAVING 
+  COUNT(*) > 3;
+
 
 * ** Capture status requests in a Stream **
 
-CREATE STREAM STATUS_REQUEST (timestamp varchar, fleetId varchar) WITH (kafka_topic='status', value_format='JSON', timestamp='timestamp', timestamp_format='E MMM dd HH:mm:ss z yyyy');
+CREATE STREAM STATUS_REQUEST (
+  timestamp varchar, fleetId varchar
+) WITH (
+  kafka_topic = 'status', value_format = 'JSON', 
+  timestamp = 'timestamp', timestamp_format = 'E MMM dd HH:mm:ss z yyyy'
+);
+
 
 * ** Stream of GPS locations **
 
-CREATE STREAM LOCATION_STREAM (latitude double, longitude double, timestamp varchar, fleetId varchar) WITH (kafka_topic='location', value_format='JSON', timestamp='timestamp', timestamp_format='E MMM dd HH:mm:ss z yyyy');
+CREATE STREAM LOCATION_STREAM (
+  latitude double, longitude double, 
+  timestamp varchar, fleetId varchar
+) WITH (
+  kafka_topic = 'location', value_format = 'JSON', 
+  timestamp = 'timestamp', timestamp_format = 'E MMM dd HH:mm:ss z yyyy'
+);
+
 
 * ** Tracking - Match Status Request & GPS co-ordinates
 
-CREATE STREAM STATUS_NOTIFICATIONS AS
-SELECT s.fleetId, l.latitude, l.longitude
-FROM STATUS_REQUEST s
-INNER JOIN LOCATION_STREAM l
-WITHIN 1 DAYS
-ON s.fleetId = l.fleetId
-EMIT CHANGES;
+CREATE STREAM STATUS_NOTIFICATIONS AS 
+SELECT 
+  s.fleetId, 
+  l.latitude, 
+  l.longitude 
+FROM 
+  STATUS_REQUEST s 
+  INNER JOIN LOCATION_STREAM l WITHIN 1 DAYS ON s.fleetId = l.fleetId EMIT CHANGES;
+
 
