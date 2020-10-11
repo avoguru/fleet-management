@@ -23,7 +23,7 @@ This repo contains artifacts to help build a fleet management demo using Conflue
 
 ## 5. Generate fleets telemetry
 
-Deploy a voluble connector using this connector config, it generates mock telemetry data to location, status & events topics. 
+Deploy a voluble connector using this [connector config](https://github.com/avoguru/fleet-management/blob/main/voluble-fleets-telemetry.json), it generates mock telemetry data to location, status & events topics. 
 
 ## 6. Create a ksqlDB Application in Confluent Cloud
 
@@ -78,6 +78,4 @@ INNER JOIN LOCATION_STREAM l
 WITHIN 1 DAYS
 ON s.fleetId = l.fleetId
 EMIT CHANGES;
-
-
 
